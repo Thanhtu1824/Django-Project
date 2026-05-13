@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="/static/my-admin/custom.css" />
+    <title>Báo Trí Thức Trẻ</title>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-item"><a href="/">Trang chủ</a></div>
+      <div class="nav-item"><a href="/">Khoa Học</a></div>
+      <div class="nav-item"><a href="/">Văn Hóa</a></div>
+      <div class="nav-item"><a href="/">Thể Thao</a></div>
+      <div class="nav-item"><a href="/">Sức Khỏe</a></div>
+      <div class="nav-item"><a href="/">Đời Sống</a></div>
+    </nav>
+
+    <div class="container">
+      <!-- Left content -->
+      <div class="left-content">
+        <article class="title-item">
+          {% for article in articles %}
+          <div class="article-item">
+            <a href="#">
+              <h3 class="art-title">{{ article.name }}</h3>
+            </a>
+
+            <div class="art-content">
+              <div class="article-thumb">
+                <img
+                  class="thumb-art"
+                  src="{{ article.image.url }}"
+                  alt="{{ article.name }}"
+                />
+              </div>
+
+              <div class="article-des">
+                <p class="description">{{ article.summary|safe }}</p>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </article>
+      </div>
+
+      <!-- Right content -->
+      <div class="right-content">
+        <div class="box-category">
+          {% for category in categories %}
+          <div class="category-section">
+            <div class="category-row">
+              <h3 class="category-title">
+                <a href="#">{{ category.name }}</a>
+              </h3>
+              <div class="subcategory-menu">
+                {% for subcategory in subcategories %} {% if subcategory.category == category %}
+                <a href="#">{{ subcategory.name }}</a>
+                {% endif %} 
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="article-list">
+              {% for article in category.article_set.all|slice:":1" %}
+              <div class="article-row">
+                <img
+                  class="thumb-art-left"
+                  src="{{ article.image.url }}"
+                  alt="{{ article.name }}"
+                />
+                <div class="art-middle-title">
+                  <h5>
+                    <a href="#">{{ article.name }}</a>
+                  </h5>
+                  <p class="description">
+                    {{ article.summary|striptags|truncatewords:20|safe }}
+                  </p>
+                </div>
+                <article class="art-sub-right">
+                  {% for article in category.article_set.all|slice:":1" %}
+                  <h5>
+                    <a href="#">{{ article.name }}</a>
+                  </h5>
+                  <p class="description">
+                    {{ article.summary|striptags|truncatewords:20|safe }}
+                  </p>
+                  {% endfor %}
+                </article>
+              </div>
+              <div class="art-sub-news">
+                {%for article in category.article_set.all|slice:":3" %}
+                <li>
+                  <h5>
+                    <a href="#">{{ article.name }}</a>
+                  </h5>
+                </li>
+                {%endfor%}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
