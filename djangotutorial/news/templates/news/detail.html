@@ -5,34 +5,74 @@
     <title>{{ article.name }}</title>
     <link rel="stylesheet" href="/static/my-admin/custom.css" />
   </head>
+
   <body>
+    <header>
+        <div><a href="/">Trang chủ</a></div>
+        <ul></ul>
+    </header>
     <section class="section-nav-item">
       <nav class="navbar">
         <ul class="scoll-nav">
-          {%for category in categories%}
+          {% for category in categories %}
           <li class="category-nav">
-            <a href="/">
-              {{category.name}}
+            <a href="{% url 'category_detail' category.slug %}">
+              {{ category.name }}
             </a>
-            </li>
-          {%endfor%}
+          </li>
+          {% endfor %}
         </ul>
       </nav>
     </section>
 
     <div class="detail-container">
+      <div class="header-content">
+        <ul class="breadcrumb">
+          <li><a>{{article.Category.name}} </a></li>
+          <li><a href="/">{{article.SubCategory.name}}</a></li>
+        </ul>
+      </div>
+
       <h1 class="detail-title">{{ article.name }}</h1>
 
       {% if article.image %}
-        <img
-          class="detail-image"
-          src="{{ article.image.url }}"
-          alt="{{ article.name }}"
-        />
+      <img
+        class="detail-image"
+        src="{{ article.image.url }}"
+        alt="{{ article.name }}"
+      />
       {% endif %}
 
-      <div class="detail-content">
-        {{ article.content|safe }}
+      <div class="detail-content">{{ article.content|safe }}</div>
+      <div class="related-articles">
+        <h3>Bài viết cùng chuyên mục</h3>
+
+        {% for item in related_articles %}
+        <div class="list-article">
+          {% if item.image %}
+          <a
+            class="thumb-link-list"
+            href="{% url 'article_detail' item.slug %}"
+          >
+            <img
+              class="thumb-art-left-list"
+              src="{{ item.image.url }}"
+              alt="{{ item.name }}"
+            />
+          </a>
+          {% endif %}
+
+          <div class="des-right-list">
+            <a href="{% url 'article_detail' item.slug %}">
+              <h5>{{ item.name }}</h5>
+            </a>
+
+            <p>{{ item.summary|striptags|safe }}</p>
+          </div>
+        </div>
+        {% empty %}
+        <p>Chưa có bài viết cùng chuyên mục.</p>
+        {% endfor %}
       </div>
     </div>
   </body>

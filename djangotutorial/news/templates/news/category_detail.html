@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{ category.name }}</title>
+    <link rel="stylesheet" href="/static/my-admin/custom.css" />
+  </head>
+
+  <body>
+    <header>
+        <div><a href="/">Trang chủ</a></div>
+        <ul></ul>
+    </header>
+    <section class="section-nav-item">
+      <nav class="navbar">
+        <ul class="scoll-nav">
+          {% for category_item in categories %}
+            <li class="category-nav">
+              <a href="{% url 'category_detail' category_item.slug %}">
+                {{ category_item.name }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    </section>
+
+    <div class="detail-container">
+      <h1>{{ category.name }}</h1>
+
+      <div class="subcategory-menu">
+        {% for subcategory in subcategories %}
+          <a href="{% url 'subcategory_detail' subcategory.slug %}">{{ subcategory.name }}</a>
+        {% endfor %}
+      </div>
+
+      <hr />
+
+      {% for article in articles %}
+        <div class="list-article">
+          {% if article.image %}
+            <a class="thumb-link-list" href="{% url 'article_detail' article.slug %}">
+              <img
+                class="thumb-art-left-list"
+                src="{{ article.image.url }}"
+                alt="{{ article.name }}"
+              />
+            </a>
+          {% endif %}
+
+          <div class="des-right-list">
+            <a href="{% url 'article_detail' article.slug %}">
+              <h5>{{ article.name }}</h5>
+            </a>
+
+            <p>{{ article.summary|striptags|truncatewords:25|safe }}</p>
+          </div>
+        </div>
+      {% empty %}
+        <p>Chưa có bài viết nào trong danh mục này.</p>
+      {% endfor %}
+    </div>
+  </body>
+</html>

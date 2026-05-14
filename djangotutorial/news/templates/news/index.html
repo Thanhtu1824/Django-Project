@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,23 +7,29 @@
     <link rel="stylesheet" href="/static/my-admin/custom.css" />
     <title>Báo Trí Thức Trẻ</title>
   </head>
+
   <body>
+    <header>
+      <div><a href="/">Trang chủ</a></div>
+      <ul></ul>
+    </header>
+    <!-- NAVBAR CATEGORY -->
     <section class="section-nav-item">
       <nav class="navbar">
         <ul class="scoll-nav">
-          {%for category in categories%}
-          <li class="category-nav" >
-            <a href="/">
-              {{category.name}}
+          {% for category in categories %}
+          <li class="category-nav">
+            <a href="{% url 'category_detail' category.slug %}">
+              {{ category.name }}
             </a>
-            </li>
-          {%endfor%}
+          </li>
+          {% endfor %}
         </ul>
       </nav>
     </section>
 
     <div class="container">
-      <!-- Left content -->
+      <!-- LEFT CONTENT -->
       <div class="left-content">
         <article class="title-item">
           {% for article in articles %}
@@ -31,84 +37,118 @@
             <a href="{% url 'article_detail' article.slug %}">
               <h3 class="art-title">{{ article.name }}</h3>
             </a>
-            <div class="art-content">
-              <div class="article-thumb">
-                <img
-                  class="thumb-art"
-                  src="{{ article.image.url }}"
-                  alt="{{ article.name }}"
-                />
+
+            <a
+              class="art-content-link"
+              href="{% url 'article_detail' article.slug %}"
+            >
+              <div class="art-content">
+                <div class="article-thumb">
+                  {% if article.image %}
+                  <img
+                    class="thumb-art"
+                    src="{{ article.image.url }}"
+                    alt="{{ article.name }}"
+                  />
+                  {% endif %}
+                </div>
+
+                <div class="article-des">
+                  <p class="description">
+                    {{ article.summary|striptags|safe }}
+                  </p>
+                </div>
               </div>
-              <div class="article-des">
-                <p class="description">{{ article.summary|safe }}</p>
-              </div>
-            </div>
+            </a>
           </div>
           {% endfor %}
         </article>
       </div>
 
-      <!-- Right content -->
+      <!-- RIGHT CONTENT -->
       <div class="right-content">
         <div class="box-category">
           {% for category in categories %}
           <div class="category-section">
+            <!-- CATEGORY HEADER -->
             <div class="category-row">
               <h3 class="category-title">
-                <a href="/">{{ category.name }}</a>
+                <a href="{% url 'category_detail' category.slug %}">
+                  {{ category.name }}
+                </a>
               </h3>
-              <!--sub menu-->
+
               <div class="subcategory-menu">
                 {% for subcategory in subcategories %} 
-                  {% if subcategory.category == category %}
-                    <a href="/">{{ subcategory.name }}</a>
-                  {% endif %} 
+                {% if subcategory.category == category %}
+                <a href="{% url 'subcategory_detail' subcategory.slug %}">
+                  {{ subcategory.name }}
+                </a>
+                {% endif %} 
                 {% endfor %}
               </div>
             </div>
 
+            <!-- CATEGORY ARTICLES -->
             <div class="article-list">
-              {% for article in category.article_set.all|slice:":1" %}
+              {% for main_article in category.article_set.all|slice:":1" %}
               <div class="article-row">
-                <img
-                  class="thumb-art-left"
-                  src="{{ article.image.url }}"
-                  alt="{{ article.name }}"
-                />
-                <div class="art-middle-title">
-                  <h5>
-                    <a href="{% url 'article_detail' article.slug %}"
-                      >{{ article.name }}</a
-                    >
-                  </h5>
+                <!-- IMAGE LEFT -->
+                <a
+                  class="thumb-art-left-link"
+                  href="{% url 'article_detail' main_article.slug %}"
+                >
+                  {% if main_article.image %}
+                  <img
+                    class="thumb-art-left"
+                    src="{{ main_article.image.url }}"
+                    alt="{{ main_article.name }}"
+                  />
+                  {% endif %}
+                </a>
+
+                <!-- MIDDLE ARTICLE -->
+                <a
+                  class="art-middle-title article-link"
+                  href="{% url 'article_detail' main_article.slug %}"
+                >
+                  <h5>{{ main_article.name }}</h5>
+
                   <p class="description">
-                    {{ article.summary|striptags|truncatewords:20|safe }}
+                    {{ main_article.summary|striptags|truncatewords:20|safe }}
                   </p>
-                </div>
+                </a>
+
+                <!-- RIGHT ARTICLE -->
                 <article class="art-sub-right">
-                  {% for article in category.article_set.all|slice:"1:2" %}
-                  <h5>
-                    <a href="{% url 'article_detail' article.slug %}"
-                      >{{ article.name }}</a
-                    >
-                  </h5>
-                  <p class="description">
-                    {{ article.summary|striptags|truncatewords:20|safe }}
-                  </p>
+                  {% for right_article in category.article_set.all|slice:"1:2"%}
+                  <a
+                    class="article-link"
+                    href="{% url 'article_detail' right_article.slug %}"
+                  >
+                    <h5>{{ right_article.name }}</h5>
+
+                    <p class="description">
+                      {{ right_article.summary|striptags|truncatewords:20|safe}}
+                    </p>
+                  </a>
                   {% endfor %}
                 </article>
               </div>
-              <!--sub news-->
-              <div class="art-sub-news">
-                {%for article in category.article_set.all|slice:":3" %}
+              {% endfor %}
+
+              <!-- SUB NEWS -->
+              <ul class="art-sub-news">
+                {% for sub_article in category.article_set.all|slice:"2:5" %}
                 <li>
                   <h5>
-                    <a href="/">{{ article.name }}</a>
+                    <a href="{% url 'article_detail' sub_article.slug %}">
+                      {{ sub_article.name }}
+                    </a>
                   </h5>
                 </li>
-                {%endfor%}
-              </div>
-              {% endfor %}
+                {% endfor %}
+              </ul>
             </div>
           </div>
           {% endfor %}

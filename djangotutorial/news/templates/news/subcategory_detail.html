@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{ subcategory.name }}</title>
+    <link rel="stylesheet" href="/static/my-admin/custom.css" />
+  </head>
+
+  <body>
+    <section class="section-nav-item">
+      <nav class="navbar">
+        <ul class="scoll-nav">
+          {% for category in categories %}
+            <li class="category-nav">
+              <a href="{% url 'category_detail' category.slug %}">
+                {{ category.name }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    </section>
+
+    <div class="detail-container">
+      <div class="header-content">
+        <ul class="breadcrumb">
+          <li>
+            <a href="{% url 'category_detail' subcategory.category.slug %}">
+              {{ subcategory.category.name }}
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'subcategory_detail' subcategory.slug %}">
+              {{ subcategory.name }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <h1 class="detail-title">{{ subcategory.name }}</h1>
+
+      <div class="related-articles">
+        {% for article in articles %}
+          <div class="list-article">
+            {% if article.image %}
+              <a class="thumb-link-list" href="{% url 'article_detail' article.slug %}">
+                <img
+                  class="thumb-art-left-list"
+                  src="{{ article.image.url }}"
+                  alt="{{ article.name }}"
+                />
+              </a>
+            {% endif %}
+
+            <div class="des-right-list">
+              <a href="{% url 'article_detail' article.slug %}">
+                <h5>{{ article.name }}</h5>
+              </a>
+
+              <p>{{ article.summary|striptags|truncatewords:25 }}</p>
+            </div>
+          </div>
+        {% empty %}
+          <p>Chưa có bài viết nào trong chuyên mục này.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>
