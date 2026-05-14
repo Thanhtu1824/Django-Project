@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{ article.name }}</title>
+    <link rel="stylesheet" href="/static/my-admin/custom.css" />
+  </head>
+  <body>
+    <section class="section-nav-item">
+      <nav class="navbar">
+        <ul class="scoll-nav">
+          {%for category in categories%}
+          <li class="category-nav">
+            <a href="/">
+              {{category.name}}
+            </a>
+            </li>
+          {%endfor%}
+        </ul>
+      </nav>
+    </section>
+
+    <div class="detail-container">
+      <h1 class="detail-title">{{ article.name }}</h1>
+
+      {% if article.image %}
+        <img
+          class="detail-image"
+          src="{{ article.image.url }}"
+          alt="{{ article.name }}"
+        />
+      {% endif %}
+
+      <div class="detail-content">
+        {{ article.content|safe }}
+      </div>
+    </div>
+  </body>
+</html>
