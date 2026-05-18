@@ -1,5 +1,7 @@
 from django.urls import path
-from app.v2.client.views import ClientDetail, ClientList, PostList, PostDetail
+from app.v2.client.views import ClientDetail, ClientList
+from app.v2.post.views import PostList, PostDetail
+
 
 urlpatterns = [
     path('client', ClientList.as_view()),

@@ -1,19 +1,22 @@
+from http import client
 
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from app.models import Client
-from app.v1.client.serializers import ClientV1Serializers
+from app.models import Post
+from app.v1.post.serializers import PostV1Serializers
 # Create your views here.
 
+
+
 @api_view(['GET','POST'])
-def client_list(request):
+def post_list(request):
     if request.method == 'GET':
-        clients = Client.objects.all()
-        serializer = ClientV1Serializers(clients, many=True)
+        post = Post.objects.all()
+        serializer = PostV1Serializers(post, many=True)
         return Response(serializer.data)
     elif request.method=='POST':
-        serializer = ClientV1Serializers(data=request.data)
+        serializer = PostV1Serializers(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -21,18 +24,18 @@ def client_list(request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def client_detail(request, pk):
+def post_detail(request, pk):
     try:
-        client = Client.objects.get(pk=pk)
-    except Client.DoesNotExist:
+        post = Post.objects.get(pk=pk)
+    except Post.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
     if request.method =='GET':
-        serializer = ClientV1Serializers(client)
+        serializer = PostV1Serializers(post)
         return Response(serializer.data)
     
     elif request.method == 'PUT':
-        serializer = ClientV1Serializers(client, data=request.data)
+        serializer = PostV1Serializers(post, data=request.data)
 
         if serializer.is_valid():
             serializer.save()
@@ -40,6 +43,5 @@ def client_detail(request, pk):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'DELETE':
-        client.delete()
+        post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-        
