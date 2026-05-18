@@ -1,15 +1,15 @@
 
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from app.permissions import IsAdminOrAuthenticatedOrReadOnly
 from app.models import Client
 from app.v1.client.serializers import ClientV1Serializers
 # Create your views here.
 
 @api_view(['GET','POST'])
+@permission_classes([IsAdminOrAuthenticatedOrReadOnly])
 def client_list(request):
-    print(request.user)
-    print(request.auth)
     if request.method == 'GET':
         clients = Client.objects.all()
         serializer = ClientV1Serializers(clients, many=True)

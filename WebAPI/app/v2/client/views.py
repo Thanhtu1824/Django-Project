@@ -1,12 +1,15 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from app.models import Client
 from django.http import Http404
 
 from .serializers import ClientV2Serializers
 
 class ClientList(APIView):
+     
+    permission_classes=([IsAuthenticated])
 
     def get(sefl, request):
         print(request.user)
