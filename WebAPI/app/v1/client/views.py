@@ -8,6 +8,8 @@ from app.v1.client.serializers import ClientV1Serializers
 
 @api_view(['GET','POST'])
 def client_list(request):
+    print(request.user)
+    print(request.auth)
     if request.method == 'GET':
         clients = Client.objects.all()
         serializer = ClientV1Serializers(clients, many=True)

@@ -9,6 +9,8 @@ from .serializers import ClientV2Serializers
 class ClientList(APIView):
 
     def get(sefl, request):
+        print(request.user)
+        print(request.auth)
         clients = Client.objects.all()
 
         serializer = ClientV2Serializers(clients, many=True)
