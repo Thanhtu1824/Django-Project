@@ -2,27 +2,33 @@ from django.db import models
 from tinymce.models import HTMLField
 # Create your models here.
 
-class Client (models.Model):
+class Brand (models.Model):
 
-    GENDER_CHOICES = [
-        ('Nam','True'),
-        ('Nu','False'),
-    ]
-
-    name = models.CharField(max_length = 100)
-    gender = models.CharField(choices = GENDER_CHOICES, default = True)
-    active = models.BooleanField(default= True)
+    name = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add = True)
 
     def __str__(self):
         return self.name
 
-class Post (models.Model):
+class Category(models.Model):
 
-    author = models.ForeignKey(Client, on_delete = models.CASCADE, related_name = 'all_post')
-    title = models.CharField(max_length=100)
-    content = models.CharField()
-    created_post = models.DateTimeField(auto_now_add = True)
+    name = models.CharField(max_length=100)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.author.name} - {self.title}'
+        return self.name
+
+class Product (models.Model):
+
+    name = models.CharField(max_length = 100)
+    active = models.BooleanField(default=True)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='all_products')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='all_products')
+    description = models.TextField()
+    price = models.FloatField()
+    quantity = models.IntegerField(default=0)
+    created = models.DateTimeField(auto_now_add = True)
+    
+    def __str__(self):
+        return self.name
+

@@ -1,11 +1,14 @@
 from django.urls import path
-from app.v4.client.views import ClientListCreateApiView, ClientRetriveUpdateDestroyApiView
-from app.v4.post.views import PostListCreateApiView, PostRetriveUpdateDestroyApiView
+from app.v4.product.views import ProductListCreateApiView, ProductRetriveUpdateDestroyApiView
+from app.v4.brand.views import BrandListCreateApiView, BrandListCreateApiView
+from app.v4.category.views import CategoryListCreateApiView, CategoryListCreateApiView
 
 
 urlpatterns = [
-    path('client', ClientListCreateApiView.as_view()),
-    path('client/<int:pk>',ClientRetriveUpdateDestroyApiView.as_view()),
-    path('post', PostListCreateApiView.as_view()),
-    path('post/<int:pk>',PostRetriveUpdateDestroyApiView.as_view())
+    path('product', ProductListCreateApiView.as_view()),
+    path('product/<int:pk>',ProductRetriveUpdateDestroyApiView.as_view()),
+    path('brand', BrandListCreateApiView.as_view()),
+    path('brand/<int:pk>',BrandListCreateApiView.as_view()),
+    path('category', CategoryListCreateApiView.as_view()),
+    path('category/<int:pk>',CategoryListCreateApiView.as_view()),
 ]
